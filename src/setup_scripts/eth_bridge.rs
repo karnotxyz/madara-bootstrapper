@@ -1,6 +1,7 @@
 use std::str::FromStr;
 use std::time::Duration;
 
+use ethers::abi::Address;
 use starknet_accounts::{Account, ConnectedAccount};
 use starknet_ff::FieldElement;
 use starknet_providers::jsonrpc::HttpTransport;
@@ -8,8 +9,8 @@ use starknet_providers::JsonRpcClient;
 use tokio::time::sleep;
 
 use crate::contract_clients::config::Config;
+use crate::contract_clients::core_contract::CoreContract;
 use crate::contract_clients::eth_bridge::{BridgeDeployable, StarknetLegacyEthBridge};
-use crate::contract_clients::starknet_sovereign::StarknetSovereignContract;
 use crate::contract_clients::utils::{
     build_single_owner_account, declare_contract, deploy_proxy_contract, init_governance_proxy, DeclarationInput,
     RpcAccount,
@@ -24,7 +25,7 @@ pub struct EthBridge<'a> {
     account_address: FieldElement,
     arg_config: &'a CliArgs,
     clients: &'a Config,
-    core_contract: &'a StarknetSovereignContract,
+    core_contract: &'a dyn CoreContract,
 }
 
 pub struct EthBridgeSetupOutput {
@@ -43,7 +44,7 @@ impl<'a> EthBridge<'a> {
         account_address: FieldElement,
         arg_config: &'a CliArgs,
         clients: &'a Config,
-        core_contract: &'a StarknetSovereignContract,
+        core_contract: &'a dyn CoreContract,
     ) -> Self {
         Self { account, account_address, arg_config, clients, core_contract }
     }
@@ -186,6 +187,7 @@ impl<'a> EthBridge<'a> {
                 "10000000000000000000000000000000000000000",
                 "10000000000000000000000000000000000000000",
                 l2_bridge_address,
+                Address::from_str(&self.arg_config.l1_multisig_address.to_string()).unwrap(),
             )
             .await;
         log::info!("✴️ ETH Bridge setup on L1 completed");

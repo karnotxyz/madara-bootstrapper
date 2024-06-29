@@ -3,8 +3,8 @@ use std::sync::Arc;
 use async_trait::async_trait;
 use ethers::types::Address;
 use starknet_api::hash::{StarkFelt, StarkHash};
-use starknet_core_contract_client::clients::StarknetSovereignContractClient;
-use starknet_core_contract_client::deploy_starknet_sovereign_behind_safe_proxy;
+use starknet_core_contract_client::clients::StarknetValidityContractClient;
+use starknet_core_contract_client::deploy_starknet_validity_behind_safe_proxy;
 use starknet_core_contract_client::interfaces::{OperatorTrait, StarknetGovernanceTrait};
 use starknet_ff::FieldElement;
 use starknet_proxy_client::proxy_support::{CoreContractInitData, ProxyInitializeData, ProxySupportTrait};
@@ -16,13 +16,13 @@ use crate::contract_clients::core_contract::{
 };
 use crate::utils::convert_felt_to_u256;
 
-pub struct StarknetSovereignContract {
-    core_contract_client: StarknetSovereignContractClient,
+pub struct StarknetValidityContract {
+    core_contract_client: StarknetValidityContractClient,
 }
 
-impl CoreContractDeploy<StarknetSovereignContract> for StarknetSovereignContract {
+impl CoreContractDeploy<StarknetValidityContract> for StarknetValidityContract {
     async fn deploy(config: &Config) -> Self {
-        let client = deploy_starknet_sovereign_behind_safe_proxy(config.eth_client().signer().clone())
+        let client = deploy_starknet_validity_behind_safe_proxy(config.eth_client().signer().clone())
             .await
             .expect("Failed to deploy the starknet contact");
 
@@ -31,7 +31,7 @@ impl CoreContractDeploy<StarknetSovereignContract> for StarknetSovereignContract
 }
 
 #[async_trait]
-impl CoreContract for StarknetSovereignContract {
+impl CoreContract for StarknetValidityContract {
     fn address(&self) -> Address {
         self.core_contract_client.address()
     }

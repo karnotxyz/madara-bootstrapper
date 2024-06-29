@@ -187,10 +187,19 @@ impl StarknetLegacyEthBridge {
     }
 
     /// Sets up the Eth bridge with the specified data
-    pub async fn setup_l1_bridge(&self, max_total_balance: &str, max_deposit: &str, l2_bridge: FieldElement) {
+    pub async fn setup_l1_bridge(
+        &self,
+        max_total_balance: &str,
+        max_deposit: &str,
+        l2_bridge: FieldElement,
+        l1_multisig_address: Address,
+    ) {
         self.eth_bridge.set_max_total_balance(U256::from_dec_str(max_total_balance).unwrap()).await.unwrap();
         self.eth_bridge.set_max_deposit(U256::from_dec_str(max_deposit).unwrap()).await.unwrap();
         self.eth_bridge.set_l2_token_bridge(field_element_to_u256(l2_bridge)).await.unwrap();
+
+        // Nominating a new governor as l1 multi sig address
+        self.eth_bridge.proxy_nominate_new_governor(l1_multisig_address).await.unwrap();
     }
 
     pub async fn setup_l2_bridge(

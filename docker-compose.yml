@@ -17,6 +17,9 @@ services:
         SN_OS_PROGRAM_HASH: ${SN_OS_PROGRAM_HASH}
         CROSS_CHAIN_WAIT_TIME: ${CROSS_CHAIN_WAIT_TIME}
         LOG_LEVEL: ${LOG_LEVEL}
+        L1_MULTISIG_ADDRESS: ${L1_MULTISIG_ADDRESS}
+        L2_MULTISIG_ADDRESS: ${L2_MULTISIG_ADDRESS}
+        VERIFIER_ADDRESS: ${VERIFIER_ADDRESS}
     volumes:
       - type: bind
         source: ./data

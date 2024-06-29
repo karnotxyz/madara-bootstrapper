@@ -9,7 +9,7 @@ use constants::{
 use rstest::rstest;
 
 use crate::contract_clients::config::Config;
-use crate::tests::constants::{L1_MULTISIG_ADDRESS, L2_MULTISIG_ADDRESS, VERIFIER_ADDRESS};
+use crate::tests::constants::{L1_MULTISIG_ADDRESS, L2_MULTISIG_ADDRESS, OPERATOR_ADDRESS, VERIFIER_ADDRESS};
 use crate::tests::erc20_bridge::erc20_bridge_test_helper;
 use crate::tests::eth_bridge::eth_bridge_test_helper;
 use crate::{bootstrap, CliArgs};
@@ -82,5 +82,7 @@ fn get_config() -> CliArgs {
         l1_multisig_address: String::from(L1_MULTISIG_ADDRESS),
         l2_multisig_address: String::from(L2_MULTISIG_ADDRESS),
         verifier_address: String::from(VERIFIER_ADDRESS),
+        operator_address: String::from(OPERATOR_ADDRESS),
+        dev: true,
     }
 }

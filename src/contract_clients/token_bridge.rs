@@ -238,11 +238,22 @@ impl StarknetTokenBridge {
     }
 
     /// Sets up the Token bridge with the specified data
-    pub async fn setup_l1_bridge(&self, governor: Address, l2_bridge: FieldElement, fee: U256) {
+    pub async fn setup_l1_bridge(
+        &self,
+        governor: Address,
+        l2_bridge: FieldElement,
+        fee: U256,
+        l1_multisig_address: Address,
+    ) {
         self.token_bridge.register_app_role_admin(governor).await.unwrap();
         self.token_bridge.register_app_governor(governor).await.unwrap();
         self.token_bridge.set_l2_token_bridge(field_element_to_u256(l2_bridge)).await.unwrap();
         self.manager.enroll_token_bridge(self.address(), fee).await.unwrap();
+
+        // Nominating a new governor with l1_multisig_address
+        self.token_bridge.proxy_nominate_new_governor(l1_multisig_address).await.unwrap();
+        self.manager.proxy_nominate_new_governor(l1_multisig_address).await.unwrap();
+        self.registry.proxy_nominate_new_governor(l1_multisig_address).await.unwrap();
     }
 
     pub async fn setup_l2_bridge(

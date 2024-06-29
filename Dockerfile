@@ -1,5 +1,5 @@
 # ==============================================
-# Karnot Bridge Deploy
+# Karnot Bootstrapper
 # ==============================================
 FROM rustlang/rust:nightly-slim as builder
 LABEL authors="karnot.xyz"
@@ -18,6 +18,9 @@ ARG SN_OS_CONFIG_HASH_VERSION
 ARG SN_OS_PROGRAM_HASH
 ARG CROSS_CHAIN_WAIT_TIME
 ARG LOG_LEVEL
+ARG L1_MULTISIG_ADDRESS
+ARG L2_MULTISIG_ADDRESS
+ARG VERIFIER_ADDRESS
 
 # Assigning the env vars
 ENV APP_CHAIN_ID=${APP_CHAIN_ID} \
@@ -31,7 +34,10 @@ ENV APP_CHAIN_ID=${APP_CHAIN_ID} \
     SN_OS_CONFIG_HASH_VERSION=${SN_OS_CONFIG_HASH_VERSION} \
     SN_OS_PROGRAM_HASH=${SN_OS_PROGRAM_HASH} \
     CROSS_CHAIN_WAIT_TIME=${CROSS_CHAIN_WAIT_TIME} \
-    LOG_LEVEL=${LOG_LEVEL}
+    LOG_LEVEL=${LOG_LEVEL} \
+    L1_MULTISIG_ADDRESS=${L1_MULTISIG_ADDRESS} \
+    L2_MULTISIG_ADDRESS=${L2_MULTISIG_ADDRESS} \
+    VERIFIER_ADDRESS=${VERIFIER_ADDRESS}
 
 # adding musl (build failing fix)
 ENV RUST_TARGET=x86_64-unknown-linux-musl
